@@ -2,22 +2,17 @@ package fr.isep.algo;
 
 import java.util.*;
 
-/**
- * Classe principale pour démarrer l'application de gestion de compagnie aérienne
- */
+
 public class Main {
     public static void main(String[] args) {
-        // Création d'une compagnie aérienne
         CompagnieAerienne airFrance = new CompagnieAerienne("Air France", "AF");
 
-        // Création d'avions
         Avion avion1 = new Avion("F-GKXL", "Airbus A320", 180);
         Avion avion2 = new Avion("F-HPJE", "Boeing 787", 300);
 
         airFrance.ajouterAvion(avion1);
         airFrance.ajouterAvion(avion2);
 
-        // Création d'employés
         Pilote pilote1 = new Pilote("P001", "Dubois", "Jean", "1 Rue Paris", "0123456789",
                 "jean.dubois@airfrance.fr", "Commandant de bord", 80000.0,
                 new Date(), "PLCM001", 5000);
@@ -32,8 +27,6 @@ public class Main {
         airFrance.ajouterEmploye(pilote1);
         airFrance.ajouterEmploye(hotesse1);
 
-        // Création d'un vol
-        // Supposons que nous sommes en décembre 2024
         Calendar calendar = Calendar.getInstance();
         calendar.set(2024, Calendar.DECEMBER, 10, 8, 0); // 10 décembre 2024, 8h00
         Date dateDepart = calendar.getTime();
@@ -44,7 +37,6 @@ public class Main {
         Vol vol1 = new Vol("AF1234", "Paris", "Nice", dateDepart, dateArrivee);
         vol1.setAvion(avion1);
 
-        // Affecter l'équipage
         List<Employe> equipage = new ArrayList<>();
         equipage.add(pilote1);
         equipage.add(hotesse1);
@@ -52,7 +44,6 @@ public class Main {
 
         airFrance.planifierVol(vol1);
 
-        // Création d'un passager et réservation
         Passager passager1 = new Passager("C001", "Petit", "Marie", "3 Rue Marseille",
                 "0654321987", "marie.petit@gmail.com", "PAB123456", "Française");
 
@@ -60,7 +51,6 @@ public class Main {
 
         Reservation reservation1 = passager1.reserverVol(vol1, "Économique", 150.0);
 
-        // Affichage des informations
         System.out.println("=== SYSTÈME DE GESTION DE COMPAGNIE AÉRIENNE ===");
         System.out.println("\nDétails du vol:");
         System.out.println(vol1.obtenirVol());
@@ -77,13 +67,11 @@ public class Main {
         System.out.println("\nInformations du personnel de cabine:");
         System.out.println(hotesse1.obtenirInfos());
 
-        // Démonstration de l'annulation d'une réservation
         System.out.println("\n=== ANNULATION DE RÉSERVATION ===");
         boolean annulationReussie = passager1.annulerReservation(reservation1.getNumeroReservation());
         System.out.println("Annulation de la réservation " + reservation1.getNumeroReservation() +
                 ": " + (annulationReussie ? "Réussie" : "Échouée"));
 
-        // Création d'un second vol
         calendar.set(2024, Calendar.DECEMBER, 15, 14, 0); // 15 décembre 2024, 14h00
         Date dateDepart2 = calendar.getTime();
 
@@ -96,20 +84,16 @@ public class Main {
 
         airFrance.planifierVol(vol2);
 
-        // Nouvelle réservation
         Reservation reservation2 = passager1.reserverVol(vol2, "Affaires", 250.0);
 
-        // Démonstration d'annulation de vol
         System.out.println("\n=== ANNULATION DE VOL ===");
         boolean volAnnule = airFrance.annulerVol(vol2.getNumeroVol());
         System.out.println("Annulation du vol " + vol2.getNumeroVol() +
                 ": " + (volAnnule ? "Réussie" : "Échouée"));
 
-        // Vérification du statut après annulation
         System.out.println("Statut du vol après annulation: " + vol2.getStatut());
         System.out.println("Statut de la réservation après annulation: " + reservation2.getStatut());
 
-        // Statistiques (bonus)
         System.out.println("\n=== STATISTIQUES ===");
         System.out.println("Revenu total: " + airFrance.calculerRevenusTotal() + " €");
 

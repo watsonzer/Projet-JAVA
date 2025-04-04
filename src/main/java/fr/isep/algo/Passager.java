@@ -1,6 +1,5 @@
 package fr.isep.algo;
 
-// Fichier: Passager.java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class Passager extends Personne {
         this.reservations = new ArrayList<>();
     }
 
-    // Getters et Setters
     public String getPasseportNum() { return passeportNum; }
     public void setPasseportNum(String passeportNum) { this.passeportNum = passeportNum; }
 
@@ -26,14 +24,12 @@ public class Passager extends Personne {
 
     public List<Reservation> getReservations() { return reservations; }
 
-    // Méthode pour réserver un vol
     public Reservation reserverVol(Vol vol, String classe, double prix) {
         Reservation reservation = new Reservation(generateReservationNum(), this, vol, classe, prix);
         reservations.add(reservation);
         return reservation;
     }
 
-    // Méthode pour annuler une réservation
     public boolean annulerReservation(String numeroReservation) {
         for (int i = 0; i < reservations.size(); i++) {
             if (reservations.get(i).getNumeroReservation().equals(numeroReservation)) {
