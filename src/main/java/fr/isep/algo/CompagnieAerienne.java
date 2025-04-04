@@ -1,6 +1,5 @@
 package fr.isep.algo;
 
-// Fichier: CompagnieAerienne.java
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +22,12 @@ public class CompagnieAerienne {
         this.passagers = new ArrayList<>();
     }
 
-    // Getters et Setters
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
 
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }
 
-    // Méthodes CRUD pour les avions
     public void ajouterAvion(Avion avion) {
         avions.add(avion);
     }
@@ -54,7 +51,6 @@ public class CompagnieAerienne {
         return null;
     }
 
-    // Méthodes CRUD pour les employés
     public void ajouterEmploye(Employe employe) {
         employes.add(employe);
     }
@@ -78,7 +74,6 @@ public class CompagnieAerienne {
         return null;
     }
 
-    // Méthodes pour la gestion des vols
     public void planifierVol(Vol vol) {
         vols.add(vol);
     }
@@ -101,7 +96,6 @@ public class CompagnieAerienne {
         return null;
     }
 
-    // Méthodes pour la gestion des passagers
     public void ajouterPassager(Passager passager) {
         passagers.add(passager);
     }
@@ -125,7 +119,6 @@ public class CompagnieAerienne {
         return null;
     }
 
-    // Méthode pour générer des statistiques (fonctionnalité avancée - bonus)
     public Map<String, Integer> statistiquesDestinationsPopulaires() {
         Map<String, Integer> destinations = new HashMap<>();
 

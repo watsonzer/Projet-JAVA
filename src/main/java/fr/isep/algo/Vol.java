@@ -1,6 +1,5 @@
 package fr.isep.algo;
 
-// Fichier: Vol.java
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +27,6 @@ public class Vol {
         this.statut = "Planifié";
     }
 
-    // Getters et Setters
     public String getNumeroVol() { return numeroVol; }
     public void setNumeroVol(String numeroVol) { this.numeroVol = numeroVol; }
 
@@ -53,9 +51,7 @@ public class Vol {
     public String getStatut() { return statut; }
     public void setStatut(String statut) { this.statut = statut; }
 
-    // Méthode pour affecter un équipage à ce vol
     public boolean affecterEquipage(List<Employe> nouveauEquipage) {
-        // Vérifier si l'équipage contient au moins un pilote
         boolean hasPilote = false;
         boolean hasPersonnelCabine = false;
 
@@ -74,17 +70,14 @@ public class Vol {
         return false;
     }
 
-    // Méthode pour ajouter une réservation
     public void ajouterReservation(Reservation reservation) {
         reservations.add(reservation);
     }
 
-    // Méthode pour annuler un vol
     public boolean annulerVol() {
         if (!statut.equals("Terminé") && !statut.equals("En vol")) {
             statut = "Annulé";
 
-            // Annuler toutes les réservations
             for (Reservation reservation : reservations) {
                 reservation.setStatut("Annulé");
             }
@@ -94,7 +87,6 @@ public class Vol {
         return false;
     }
 
-    // Méthode pour obtenir les informations du vol
     public String obtenirVol() {
         return "Vol n° " + numeroVol + ": " + origine + " -> " + destination +
                 ", Départ: " + dateDepart + ", Arrivée: " + dateArrivee +

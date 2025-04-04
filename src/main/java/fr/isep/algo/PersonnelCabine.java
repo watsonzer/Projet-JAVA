@@ -17,7 +17,6 @@ public class PersonnelCabine extends Employe {
         this.languesParlees = new ArrayList<>();
     }
 
-    // Getters et Setters
     public String getCertification() { return certification; }
     public void setCertification(String certification) { this.certification = certification; }
 

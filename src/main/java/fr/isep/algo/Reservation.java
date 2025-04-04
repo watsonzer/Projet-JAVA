@@ -1,6 +1,5 @@
 package fr.isep.algo;
 
-// Fichier: Reservation.java
 import java.util.Date;
 
 public class Reservation {
@@ -8,25 +7,23 @@ public class Reservation {
     private Passager passager;
     private Vol vol;
     private Date dateReservation;
-    private String classe; // par exemple: "Économique", "Affaires", "Première"
+    private String classe;
     private double prix;
-    private String statut; // par exemple: "Confirmée", "Annulée", "En attente"
+    private String statut;
 
     public Reservation(String numeroReservation, Passager passager, Vol vol,
                        String classe, double prix) {
         this.numeroReservation = numeroReservation;
         this.passager = passager;
         this.vol = vol;
-        this.dateReservation = new Date(); // Date actuelle
+        this.dateReservation = new Date();
         this.classe = classe;
         this.prix = prix;
         this.statut = "Confirmée";
 
-        // Ajouter cette réservation au vol
         vol.ajouterReservation(this);
     }
 
-    // Getters et Setters
     public String getNumeroReservation() { return numeroReservation; }
     public void setNumeroReservation(String numeroReservation) { this.numeroReservation = numeroReservation; }
 
@@ -48,7 +45,6 @@ public class Reservation {
     public String getStatut() { return statut; }
     public void setStatut(String statut) { this.statut = statut; }
 
-    // Méthode pour obtenir les informations de la réservation
     public String obtenirReservations() {
         return "Réservation n° " + numeroReservation +
                 "\nPassager: " + passager.getNom() + " " + passager.getPrenom() +
