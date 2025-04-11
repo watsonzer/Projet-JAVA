@@ -1,95 +1,276 @@
 package fr.isep.algo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class Vol {
+public class Vol implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String numeroVol;
     private String origine;
     private String destination;
-    private Date dateDepart;
-    private Date dateArrivee;
-    private Avion avion;
-    private List<Employe> equipage;
-    private List<Reservation> reservations;
-    private String statut; // par exemple: "Planifié", "En vol", "Terminé", "Annulé"
+    private String dateDepart;
+    private String heureDepart;
+    private String heureArrivee;
+    private String duree;
+    private double distance;
+    private String statut; // "Planifié", "En vol", "Terminé", "Annulé", etc.
 
-    public Vol(String numeroVol, String origine, String destination,
-               Date dateDepart, Date dateArrivee) {
+    private Avion avion;
+    private Pilote pilote;
+    private List<PersonnelCabine> equipageCabine;
+    private List<Reservation> reservations;
+    private int placesDisponiblesFirst;
+    private int placesDisponiblesBusiness;
+    private int placesDisponiblesEconomy;
+
+    public Vol() {
+        this.equipageCabine = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+    }
+
+    public Vol(String numeroVol, String origine, String destination, String dateDepart,
+               String heureDepart, String heureArrivee, String duree, double distance) {
         this.numeroVol = numeroVol;
         this.origine = origine;
         this.destination = destination;
         this.dateDepart = dateDepart;
-        this.dateArrivee = dateArrivee;
-        this.equipage = new ArrayList<>();
-        this.reservations = new ArrayList<>();
+        this.heureDepart = heureDepart;
+        this.heureArrivee = heureArrivee;
+        this.duree = duree;
+        this.distance = distance;
         this.statut = "Planifié";
+        this.equipageCabine = new ArrayList<>();
+        this.reservations = new ArrayList<>();
     }
 
-    public String getNumeroVol() { return numeroVol; }
-    public void setNumeroVol(String numeroVol) { this.numeroVol = numeroVol; }
+    // Getters and Setters
+    public String getNumeroVol() {
+        return numeroVol;
+    }
 
-    public String getOrigine() { return origine; }
-    public void setOrigine(String origine) { this.origine = origine; }
+    public void setNumeroVol(String numeroVol) {
+        this.numeroVol = numeroVol;
+    }
 
-    public String getDestination() { return destination; }
-    public void setDestination(String destination) { this.destination = destination; }
+    public String getOrigine() {
+        return origine;
+    }
 
-    public Date getDateDepart() { return dateDepart; }
-    public void setDateDepart(Date dateDepart) { this.dateDepart = dateDepart; }
+    public void setOrigine(String origine) {
+        this.origine = origine;
+    }
 
-    public Date getDateArrivee() { return dateArrivee; }
-    public void setDateArrivee(Date dateArrivee) { this.dateArrivee = dateArrivee; }
+    public String getDestination() {
+        return destination;
+    }
 
-    public Avion getAvion() { return avion; }
-    public void setAvion(Avion avion) { this.avion = avion; }
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
-    public List<Employe> getEquipage() { return equipage; }
-    public List<Reservation> getReservations() { return reservations; }
+    public String getDateDepart() {
+        return dateDepart;
+    }
 
-    public String getStatut() { return statut; }
-    public void setStatut(String statut) { this.statut = statut; }
+    public void setDateDepart(String dateDepart) {
+        this.dateDepart = dateDepart;
+    }
 
-    public boolean affecterEquipage(List<Employe> nouveauEquipage) {
-        boolean hasPilote = false;
-        boolean hasPersonnelCabine = false;
+    public String getHeureDepart() {
+        return heureDepart;
+    }
 
-        for (Employe employe : nouveauEquipage) {
-            if (employe instanceof Pilote) {
-                hasPilote = true;
-            } else if (employe instanceof PersonnelCabine) {
-                hasPersonnelCabine = true;
-            }
+    public void setHeureDepart(String heureDepart) {
+        this.heureDepart = heureDepart;
+    }
+
+    public String getHeureArrivee() {
+        return heureArrivee;
+    }
+
+    public void setHeureArrivee(String heureArrivee) {
+        this.heureArrivee = heureArrivee;
+    }
+
+    public String getDuree() {
+        return duree;
+    }
+
+    public void setDuree(String duree) {
+        this.duree = duree;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+        if (avion != null) {
+            this.placesDisponiblesFirst = avion.getCapaciteFirst();
+            this.placesDisponiblesBusiness = avion.getCapaciteBusiness();
+            this.placesDisponiblesEconomy = avion.getCapaciteEconomy();
         }
+    }
 
-        if (hasPilote && hasPersonnelCabine) {
-            this.equipage = nouveauEquipage;
-            return true;
+    public Pilote getPilote() {
+        return pilote;
+    }
+
+    public void setPilote(Pilote pilote) {
+        this.pilote = pilote;
+        if (pilote != null) {
+            pilote.assignerVol(this);
         }
-        return false;
+    }
+
+    public List<PersonnelCabine> getEquipageCabine() {
+        return equipageCabine;
+    }
+
+    public void ajouterPersonnelCabine(PersonnelCabine personnel) {
+        this.equipageCabine.add(personnel);
+        personnel.assignerVol(this);
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
     public void ajouterReservation(Reservation reservation) {
-        reservations.add(reservation);
+        this.reservations.add(reservation);
+        // Mise à jour des places disponibles
+        switch (reservation.getClasse()) {
+            case "First":
+                placesDisponiblesFirst--;
+                break;
+            case "Business":
+                placesDisponiblesBusiness--;
+                break;
+            case "Economy":
+                placesDisponiblesEconomy--;
+                break;
+        }
     }
 
-    public boolean annulerVol() {
-        if (!statut.equals("Terminé") && !statut.equals("En vol")) {
-            statut = "Annulé";
-
-            for (Reservation reservation : reservations) {
-                reservation.setStatut("Annulé");
+    public boolean annulerReservation(String numeroReservation) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getNumeroReservation().equals(numeroReservation)) {
+                reservations.remove(reservation);
+                // Mise à jour des places disponibles
+                switch (reservation.getClasse()) {
+                    case "First":
+                        placesDisponiblesFirst++;
+                        break;
+                    case "Business":
+                        placesDisponiblesBusiness++;
+                        break;
+                    case "Economy":
+                        placesDisponiblesEconomy++;
+                        break;
+                }
+                return true;
             }
-
-            return true;
         }
         return false;
     }
 
+    // Method to assign crew to the flight
+    public void affecterEquipage(Pilote pilote, List<PersonnelCabine> equipage) {
+        this.setPilote(pilote);
+        for (PersonnelCabine personnel : equipage) {
+            this.ajouterPersonnelCabine(personnel);
+        }
+    }
+
+    // Method to get flight information
     public String obtenirVol() {
-        return "Vol n° " + numeroVol + ": " + origine + " -> " + destination +
-                ", Départ: " + dateDepart + ", Arrivée: " + dateArrivee +
-                ", Statut: " + statut;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Numéro de vol: ").append(numeroVol).append("\n");
+        sb.append("Origine: ").append(origine).append("\n");
+        sb.append("Destination: ").append(destination).append("\n");
+        sb.append("Date de départ: ").append(dateDepart).append("\n");
+        sb.append("Heure de départ: ").append(heureDepart).append("\n");
+        sb.append("Heure d'arrivée: ").append(heureArrivee).append("\n");
+        sb.append("Durée: ").append(duree).append("\n");
+        sb.append("Distance: ").append(distance).append(" km\n");
+        sb.append("Statut: ").append(statut).append("\n");
+
+        sb.append("Avion: ");
+        if (avion != null) {
+            sb.append(avion.getImmatriculation()).append(" (").append(avion.getModele()).append(")\n");
+        } else {
+            sb.append("Non assigné\n");
+        }
+
+        sb.append("Pilote: ");
+        if (pilote != null) {
+            sb.append(pilote.getNom()).append(" ").append(pilote.getPrenom()).append("\n");
+        } else {
+            sb.append("Non assigné\n");
+        }
+
+        sb.append("Équipage de cabine: ");
+        if (equipageCabine.isEmpty()) {
+            sb.append("Non assigné\n");
+        } else {
+            sb.append("\n");
+            for (PersonnelCabine personnel : equipageCabine) {
+                sb.append("  - ").append(personnel.getNom()).append(" ").append(personnel.getPrenom()).append("\n");
+            }
+        }
+
+        sb.append("Places disponibles:\n");
+        sb.append("  - Première classe: ").append(placesDisponiblesFirst).append("\n");
+        sb.append("  - Classe affaires: ").append(placesDisponiblesBusiness).append("\n");
+        sb.append("  - Classe économique: ").append(placesDisponiblesEconomy).append("\n");
+
+        return sb.toString();
+    }
+
+    // Method to cancel a flight
+    public boolean annulerVol() {
+        if (statut.equals("Terminé") || statut.equals("En vol")) {
+            return false;
+        }
+
+        this.statut = "Annulé";
+
+        // Free up the crew
+        if (pilote != null) {
+            pilote.retirerVol(this);
+            pilote = null;
+        }
+
+        for (PersonnelCabine personnel : equipageCabine) {
+            personnel.retirerVol(this);
+        }
+        equipageCabine.clear();
+
+        // Free up the airplane
+        if (avion != null) {
+            avion.getVolsAssignes().remove(this);
+            avion = null;
+        }
+
+        return true;
     }
 }

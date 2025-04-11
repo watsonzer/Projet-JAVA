@@ -1,41 +1,114 @@
 package fr.isep.algo;
 
+
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CompagnieAerienne {
+public class CompagnieAerienne implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nom;
     private String code;
-    private List<Avion> avions;
-    private List<Employe> employes;
-    private List<Vol> vols;
-    private List<Passager> passagers;
+    private String adresse;
+    private String telephone;
+    private String email;
+    private String siteWeb;
 
-    public CompagnieAerienne(String nom, String code) {
-        this.nom = nom;
-        this.code = code;
-        this.avions = new ArrayList<>();
+    private List<Avion> flotte;
+    private List<Employe> employes;
+    private List<Passager> passagers;
+    private List<Vol> vols;
+    private Map<String, Vol> volsParNumero;
+
+    public CompagnieAerienne() {
+        this.flotte = new ArrayList<>();
         this.employes = new ArrayList<>();
-        this.vols = new ArrayList<>();
         this.passagers = new ArrayList<>();
+        this.vols = new ArrayList<>();
+        this.volsParNumero = new HashMap<>();
     }
 
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
+    public CompagnieAerienne(String nom, String code, String adresse, String telephone, String email, String siteWeb) {
+        this.nom = nom;
+        this.code = code;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.email = email;
+        this.siteWeb = siteWeb;
 
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+        this.flotte = new ArrayList<>();
+        this.employes = new ArrayList<>();
+        this.passagers = new ArrayList<>();
+        this.vols = new ArrayList<>();
+        this.volsParNumero = new HashMap<>();
+    }
+
+    // Getters and Setters
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSiteWeb() {
+        return siteWeb;
+    }
+
+    public void setSiteWeb(String siteWeb) {
+        this.siteWeb = siteWeb;
+    }
+
+    // Aircraft management
+    public List<Avion> getFlotte() {
+        return flotte;
+    }
 
     public void ajouterAvion(Avion avion) {
-        avions.add(avion);
+        flotte.add(avion);
     }
 
     public boolean supprimerAvion(String immatriculation) {
-        for (int i = 0; i < avions.size(); i++) {
-            if (avions.get(i).getImmatriculation().equals(immatriculation)) {
-                avions.remove(i);
+        for (Avion avion : flotte) {
+            if (avion.getImmatriculation().equals(immatriculation)) {
+                flotte.remove(avion);
                 return true;
             }
         }
@@ -43,7 +116,7 @@ public class CompagnieAerienne {
     }
 
     public Avion rechercherAvion(String immatriculation) {
-        for (Avion avion : avions) {
+        for (Avion avion : flotte) {
             if (avion.getImmatriculation().equals(immatriculation)) {
                 return avion;
             }
@@ -51,14 +124,19 @@ public class CompagnieAerienne {
         return null;
     }
 
+    // Employee management
+    public List<Employe> getEmployes() {
+        return employes;
+    }
+
     public void ajouterEmploye(Employe employe) {
         employes.add(employe);
     }
 
     public boolean supprimerEmploye(String id) {
-        for (int i = 0; i < employes.size(); i++) {
-            if (employes.get(i).getId().equals(id)) {
-                employes.remove(i);
+        for (Employe employe : employes) {
+            if (employe.getId().equals(id)) {
+                employes.remove(employe);
                 return true;
             }
         }
@@ -74,26 +152,37 @@ public class CompagnieAerienne {
         return null;
     }
 
-    public void planifierVol(Vol vol) {
-        vols.add(vol);
+    public String obtenirRoleEmploye(String id) {
+        Employe employe = rechercherEmploye(id);
+        if (employe != null) {
+            return employe.obtenirRole();
+        }
+        return "Employé non trouvé";
     }
 
-    public boolean annulerVol(String numeroVol) {
-        for (Vol vol : vols) {
-            if (vol.getNumeroVol().equals(numeroVol)) {
-                return vol.annulerVol();
+    public List<Pilote> getPilotes() {
+        List<Pilote> pilotes = new ArrayList<>();
+        for (Employe employe : employes) {
+            if (employe instanceof Pilote) {
+                pilotes.add((Pilote) employe);
             }
         }
-        return false;
+        return pilotes;
     }
 
-    public Vol rechercherVol(String numeroVol) {
-        for (Vol vol : vols) {
-            if (vol.getNumeroVol().equals(numeroVol)) {
-                return vol;
+    public List<PersonnelCabine> getPersonnelCabine() {
+        List<PersonnelCabine> personnels = new ArrayList<>();
+        for (Employe employe : employes) {
+            if (employe instanceof PersonnelCabine) {
+                personnels.add((PersonnelCabine) employe);
             }
         }
-        return null;
+        return personnels;
+    }
+
+    // Passenger management
+    public List<Passager> getPassagers() {
+        return passagers;
     }
 
     public void ajouterPassager(Passager passager) {
@@ -101,9 +190,9 @@ public class CompagnieAerienne {
     }
 
     public boolean supprimerPassager(String id) {
-        for (int i = 0; i < passagers.size(); i++) {
-            if (passagers.get(i).getId().equals(id)) {
-                passagers.remove(i);
+        for (Passager passager : passagers) {
+            if (passager.getId().equals(id)) {
+                passagers.remove(passager);
                 return true;
             }
         }
@@ -119,7 +208,119 @@ public class CompagnieAerienne {
         return null;
     }
 
-    public Map<String, Integer> statistiquesDestinationsPopulaires() {
+    public Passager rechercherPassagerParPasseport(String numeroPasseport) {
+        for (Passager passager : passagers) {
+            if (passager.getNumeroPasseport().equals(numeroPasseport)) {
+                return passager;
+            }
+        }
+        return null;
+    }
+
+    // Flight management
+    public List<Vol> getVols() {
+        return vols;
+    }
+
+    public void planifierVol(Vol vol) {
+        vols.add(vol);
+        volsParNumero.put(vol.getNumeroVol(), vol);
+    }
+
+    public boolean annulerVol(String numeroVol) {
+        Vol vol = obtenirVol(numeroVol);
+        if (vol != null) {
+            if (vol.annulerVol()) {
+                // Note: we keep the flight in the list, but with status "Cancelled"
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Vol obtenirVol(String numeroVol) {
+        return volsParNumero.get(numeroVol);
+    }
+
+    public List<Vol> rechercherVols(String origine, String destination, String date) {
+        List<Vol> volsTrouves = new ArrayList<>();
+        for (Vol vol : vols) {
+            if (vol.getOrigine().equals(origine) &&
+                    vol.getDestination().equals(destination) &&
+                    vol.getDateDepart().equals(date) &&
+                    !vol.getStatut().equals("Annulé")) {
+                volsTrouves.add(vol);
+            }
+        }
+        return volsTrouves;
+    }
+
+    // Staff assignment
+    public boolean affecterEquipageVol(String numeroVol, String idPilote, List<String> idsPersonnelCabine) {
+        Vol vol = obtenirVol(numeroVol);
+        if (vol == null) {
+            return false;
+        }
+
+        // Assign the pilot
+        Employe employe = rechercherEmploye(idPilote);
+        if (employe instanceof Pilote) {
+            vol.setPilote((Pilote) employe);
+        } else {
+            return false;
+        }
+
+        // Assign cabin crew
+        for (String idPersonnel : idsPersonnelCabine) {
+            employe = rechercherEmploye(idPersonnel);
+            if (employe instanceof PersonnelCabine) {
+                vol.ajouterPersonnelCabine((PersonnelCabine) employe);
+            }
+        }
+
+        return true;
+    }
+
+    // Aircraft assignment
+    public boolean affecterAvionVol(String numeroVol, String immatriculation) {
+        Vol vol = obtenirVol(numeroVol);
+        Avion avion = rechercherAvion(immatriculation);
+
+        if (vol == null || avion == null) {
+            return false;
+        }
+
+        return avion.affecterVol(vol);
+    }
+
+    // Statistics
+    public int getNombreVols() {
+        return vols.size();
+    }
+
+    public int getNombreVolsParStatut(String statut) {
+        int count = 0;
+        for (Vol vol : vols) {
+            if (vol.getStatut().equals(statut)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getNombrePassagers() {
+        return passagers.size();
+    }
+
+    public int getNombreReservations() {
+        int count = 0;
+        for (Vol vol : vols) {
+            count += vol.getReservations().size();
+        }
+        return count;
+    }
+
+    public Map<String, Integer> getDestinationsPopulaires() {
         Map<String, Integer> destinations = new HashMap<>();
 
         for (Vol vol : vols) {
@@ -130,15 +331,15 @@ public class CompagnieAerienne {
         return destinations;
     }
 
-    public double calculerRevenusTotal() {
-        double total = 0;
+    public double getRevenusGeneres() {
+        double revenus = 0;
         for (Vol vol : vols) {
             for (Reservation reservation : vol.getReservations()) {
-                if (!reservation.getStatut().equals("Annulé")) {
-                    total += reservation.getPrix();
+                if (!reservation.getStatut().equals("Annulée")) {
+                    revenus += reservation.getPrix();
                 }
             }
         }
-        return total;
+        return revenus;
     }
 }

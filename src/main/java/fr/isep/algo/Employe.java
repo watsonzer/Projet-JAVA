@@ -1,33 +1,71 @@
 package fr.isep.algo;
 
-import java.util.Date;
+public class Employe extends Person {
+    private static final long serialVersionUID = 1L;
 
-public abstract class Employe extends Personne {
-    protected String poste;
-    protected double salaire;
-    protected Date dateEmbauche;
+    private String matricule;
+    private String dateEmbauche;
+    private String poste;
+    private double salaire;
 
-    public Employe(String id, String nom, String prenom, String adresse, String telephone,
-                   String email, String poste, double salaire, Date dateEmbauche) {
-        super(id, nom, prenom, adresse, telephone, email);
+    public Employe() {
+        super();
+    }
+
+    public Employe(String id, String nom, String prenom, String dateNaissance, String adresse,
+                   String telephone, String email, String matricule, String dateEmbauche,
+                   String poste, double salaire) {
+        super(id, nom, prenom, dateNaissance, adresse, telephone, email);
+        this.matricule = matricule;
+        this.dateEmbauche = dateEmbauche;
         this.poste = poste;
         this.salaire = salaire;
+    }
+
+    // Getters and Setters
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
+    }
+
+    public String getDateEmbauche() {
+        return dateEmbauche;
+    }
+
+    public void setDateEmbauche(String dateEmbauche) {
         this.dateEmbauche = dateEmbauche;
     }
 
-    public String getPoste() { return poste; }
-    public void setPoste(String poste) { this.poste = poste; }
+    public String getPoste() {
+        return poste;
+    }
 
-    public double getSalaire() { return salaire; }
-    public void setSalaire(double salaire) { this.salaire = salaire; }
+    public void setPoste(String poste) {
+        this.poste = poste;
+    }
 
-    public Date getDateEmbauche() { return dateEmbauche; }
-    public void setDateEmbauche(Date dateEmbauche) { this.dateEmbauche = dateEmbauche; }
+    public double getSalaire() {
+        return salaire;
+    }
 
-    public abstract String obtenirRole();
+    public void setSalaire(double salaire) {
+        this.salaire = salaire;
+    }
+
+    @Override
+    public String obtenirRole() {
+        return poste;
+    }
 
     @Override
     public String obtenirInfos() {
-        return "Employé: " + id + ", " + nom + " " + prenom + ", Poste: " + poste;
+        return super.obtenirInfos() +
+                "\nMatricule: " + matricule +
+                "\nDate d'embauche: " + dateEmbauche +
+                "\nPoste: " + poste +
+                "\nSalaire: " + salaire;
     }
 }
